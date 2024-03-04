@@ -23,7 +23,7 @@ BLINK_TIMER = 0.5
 B_BLINK = Value('b', True)  # Shared boolean value
 R_BLINK = Value('b', True)
 G_BLINK = Value('b', True)
-BAY_VALUE = Value(ctypes.c_char_p, "test")
+BAY_VALUE = Value(ctypes.c_char_p, ctypes.create_string_buffer("test"))
 
 # URLS
 #getInfoUrl = "http://api.cgold.local/api/adicomms/getstatus"
