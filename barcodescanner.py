@@ -1,4 +1,3 @@
-import ctypes
 import time
 import evdev
 from evdev import InputDevice, ecodes
@@ -23,7 +22,6 @@ BLINK_TIMER = 0.5
 B_BLINK = Value('b', True)  # Shared boolean value
 R_BLINK = Value('b', True)
 G_BLINK = Value('b', True)
-BAY_VALUE = Value('c', "test")
 
 # URLS
 #getInfoUrl = "http://api.cgold.local/api/adicomms/getstatus"
@@ -54,21 +52,21 @@ def loop_a():
             ledon = True
         time.sleep(BLINK_TIMER)
 
-def keyboard_listener():
+def keyboard_listener(BAY):
     keyboard_device = InputDevice("/dev/input/event0")
     try:
         for event in keyboard_device.read_loop():
-            listen_for_key(event)
+            listen_for_key(event, BAY)
     finally:
         keyboard_device.close()  # Ensure device closure
 
-def listen_for_key(event):
+def listen_for_key(event, BAY):
     global BARCODE
     if event.type == ecodes.EV_KEY and event.value == 1:  # Check for key press
         key_name = evdev.ecodes.KEY[event.code]  # Access key names using KEY
         if event.code == 28:
             print("Enter Pressed")
-            asyncio.run(processShipment(BARCODE))
+            asyncio.run(processShipment(BARCODE, BAY))
             BARCODE = ""
         else:
             BARCODE += key_name.replace("KEY_", "")
@@ -89,9 +87,8 @@ def getMyInfo():
         res = {"error": False, "status_code": "error", "data": {"bay": "error bay"}}
         return res
     
-async def processShipment(bcode):
+async def processShipment(bcode, BAY):
     global sendBarcodeUrl
-    global BAY
     writeToFile(f"Sending Data to api: {bcode} and bay {BAY}")
 
     # Prepare data for POST request
@@ -131,10 +128,12 @@ def deviceIdentification():
     print(res)
     print(res['error'])
     if not res['error']:
+        BAY = res['data']['data']['jsondata']['bay']
         LEDState('ready')
+        Process(target=keyboard_listener(BAY)).start()
     else:
         R_BLINK.value = True
-    BAY = res['data']['data']['jsondata']['bay']
+    
     print(f"B: {B_BLINK.value} G: {G_BLINK.value} R: {R_BLINK.value} BAY: {BAY}")
 
 def LEDState(state):
@@ -174,5 +173,5 @@ def LEDState(state):
 
 if __name__ == '__main__':
     Process(target=loop_a).start()
-    Process(target=keyboard_listener).start()
+    #Process(target=keyboard_listener).start()
     deviceIdentification()
