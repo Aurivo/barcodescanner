@@ -22,12 +22,12 @@ BLINK_TIMER = 0.5
 B_BLINK = Value('b', True)  # Shared boolean value
 R_BLINK = Value('b', True)
 G_BLINK = Value('b', True)
-BAY_VALUE = Value('s', "")
 
 # URLS
 #getInfoUrl = "http://api.cgold.local/api/adicomms/getstatus"
 getInfoUrl = "http://192.168.86.72:5000/processdata"
 sendBarcodeUrl = "http://192.168.86.72:5000/data"
+BAY = ""
 BARCODE = ""
 
 def loop_a():
@@ -61,12 +61,12 @@ def keyboard_listener():
         keyboard_device.close()  # Ensure device closure
 
 def listen_for_key(event):
-    global BARCODE
+    global BARCODE, BAY
     if event.type == ecodes.EV_KEY and event.value == 1:  # Check for key press
         key_name = evdev.ecodes.KEY[event.code]  # Access key names using KEY
         if event.code == 28:
             print("Enter Pressed")
-            asyncio.run(processShipment(BARCODE))
+            asyncio.run(processShipment(BARCODE, BAY))
             BARCODE = ""
         else:
             BARCODE += key_name.replace("KEY_", "")
@@ -87,12 +87,12 @@ def getMyInfo():
         res = {"error": False, "status_code": "error", "data": {"bay": "error bay"}}
         return res
     
-async def processShipment(bcode):
-    global BAY_VALUE, sendBarcodeUrl
+async def processShipment(bcode, BAY):
+    global sendBarcodeUrl
     writeToFile(f"Sending Data to api: {bcode}")
 
     # Prepare data for POST request
-    data = {"barcode": bcode, "bay": BAY_VALUE.value}
+    data = {"barcode": bcode, "bay": BAY}
 
     LEDState('processing')
 
@@ -121,7 +121,7 @@ def writeToFile(msg):
         file.write(f"{msg}\n")
 
 def deviceIdentification():
-    global B_BLINK, R_BLINK, G_BLINK, BAY_VALUE
+    global B_BLINK, R_BLINK, G_BLINK, BAY
     LEDState('processing')
     res = getMyInfo()
     print(res)
@@ -130,8 +130,8 @@ def deviceIdentification():
         LEDState('ready')
     else:
         R_BLINK.value = True
-    BAY_VALUE.value = res['data']['data']['jsondata']['bay']
-    print(f"B: {B_BLINK.value} G: {G_BLINK.value} R: {R_BLINK.value} BAY: {BAY_VALUE.value}")
+    BAY = res['data']['data']['jsondata']['bay']
+    print(f"B: {B_BLINK.value} G: {G_BLINK.value} R: {R_BLINK.value} BAY: {BAY}")
 
 def LEDState(state):
     global B_BLINK, R_BLINK, G_BLINK
