@@ -89,7 +89,7 @@ def getMyInfo():
     
 async def processShipment(bcode, BAY):
     global sendBarcodeUrl
-    writeToFile(f"Sending Data to api: {bcode}")
+    writeToFile(f"Sending Data to api: {bcode} and bay {BAY}")
 
     # Prepare data for POST request
     data = {"barcode": bcode, "bay": BAY}
