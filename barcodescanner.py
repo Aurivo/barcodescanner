@@ -61,12 +61,12 @@ def keyboard_listener():
         keyboard_device.close()  # Ensure device closure
 
 def listen_for_key(event):
-    global BARCODE
+    global BARCODE, BAY
     if event.type == ecodes.EV_KEY and event.value == 1:  # Check for key press
         key_name = evdev.ecodes.KEY[event.code]  # Access key names using KEY
         if event.code == 28:
             print("Enter Pressed")
-            asyncio.run(processShipment(BARCODE))
+            asyncio.run(processShipment(BARCODE, BAY))
             BARCODE = ""
         else:
             BARCODE += key_name.replace("KEY_", "")
@@ -87,8 +87,8 @@ def getMyInfo():
         res = {"error": False, "status_code": "error", "data": {"bay": "error bay"}}
         return res
     
-async def processShipment(bcode):
-    global BAY, sendBarcodeUrl
+async def processShipment(bcode, BAY):
+    global sendBarcodeUrl
     writeToFile(f"Sending Data to api: {bcode}")
 
     # Prepare data for POST request
