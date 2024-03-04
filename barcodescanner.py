@@ -28,7 +28,6 @@ BAY_VALUE = Value('s', "")
 #getInfoUrl = "http://api.cgold.local/api/adicomms/getstatus"
 getInfoUrl = "http://192.168.86.72:5000/processdata"
 sendBarcodeUrl = "http://192.168.86.72:5000/data"
-BAY = ""
 BARCODE = ""
 
 def loop_a():
@@ -89,11 +88,11 @@ def getMyInfo():
         return res
     
 async def processShipment(bcode):
-    global BAY, sendBarcodeUrl
+    global BAY_VALUE, sendBarcodeUrl
     writeToFile(f"Sending Data to api: {bcode}")
 
     # Prepare data for POST request
-    data = {"barcode": bcode, "bay": BAY}
+    data = {"barcode": bcode, "bay": BAY_VALUE.value}
 
     LEDState('processing')
 
@@ -122,7 +121,7 @@ def writeToFile(msg):
         file.write(f"{msg}\n")
 
 def deviceIdentification():
-    global B_BLINK, R_BLINK, G_BLINK, BAY
+    global B_BLINK, R_BLINK, G_BLINK, BAY_VALUE
     LEDState('processing')
     res = getMyInfo()
     print(res)
@@ -131,7 +130,7 @@ def deviceIdentification():
         LEDState('ready')
     else:
         R_BLINK.value = True
-    BAY = res['data']['data']['jsondata']['bay']
+    BAY_VALUE.value = res['data']['data']['jsondata']['bay']
     print(f"B: {B_BLINK.value} G: {G_BLINK.value} R: {R_BLINK.value} BAY: {BAY}")
 
 def LEDState(state):
