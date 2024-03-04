@@ -131,7 +131,7 @@ def deviceIdentification():
     else:
         R_BLINK.value = True
     BAY = res['data']['bay']
-    print(f"B: {B_BLINK.value} G: {G_BLINK.value} R: {R_BLINK.value}")
+    print(f"B: {B_BLINK.value} G: {G_BLINK.value} R: {R_BLINK.value} BAY: {BAY}")
 
 def LEDState(state):
     global B_BLINK, R_BLINK, G_BLINK
