@@ -130,7 +130,7 @@ def deviceIdentification():
         LEDState('ready')
     else:
         R_BLINK.value = True
-    BAY = res['data']['bay']
+    BAY = res['data']['data']['jsondata']['bay']
     print(f"B: {B_BLINK.value} G: {G_BLINK.value} R: {R_BLINK.value} BAY: {BAY}")
 
 def LEDState(state):
