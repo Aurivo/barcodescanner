@@ -130,7 +130,7 @@ def deviceIdentification():
     #print(res['error'])
     print(res["data"])
     if not res['error']:
-        BAY = res["data"]["data"][0]["jsondata"]["bay"]
+        BAY = res["data"]["data"]["bay"]
         LEDState('ready')
         Process(target=keyboard_listener(BAY)).start()
     else:
