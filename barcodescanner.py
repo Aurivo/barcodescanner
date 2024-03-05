@@ -88,7 +88,7 @@ def getMyInfo():
         res = {"error": False, "status_code": "error", "data": {"bay": "error bay"}}
         return res
     
-async def processShipment(bcode, BAY):
+async def processShipmentAsync(bcode, BAY):
     global sendBarcodeUrl
     writeToFile(f"Sending Data to api: {bcode} and bay {BAY} url: {sendBarcodeUrl}")
 
@@ -118,7 +118,7 @@ async def processShipment(bcode, BAY):
             print('Error sending request:', e)
             LEDState("barcode_error")
 
-def processShipment1(bcode, BAY):
+def processShipment(bcode, BAY):
     global sendBarcodeUrl
 
     # Data to be sent in the request body (as a dictionary)
