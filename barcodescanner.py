@@ -137,6 +137,7 @@ def processShipment(bcode, BAY):
         if response.status_code == 200:
             # Print the response content
             res = response.json()
+            print(res['message'])
             writeToFile(f"Data sent successfully. Response: {res}")
             if res['message'] == "success":
                 LEDState("barcode_ok")
