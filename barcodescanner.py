@@ -126,13 +126,13 @@ def deviceIdentification():
     global BAY
     LEDState('processing')
     res = getMyInfo()
-    print(res)
-    print(res['error'])
-    print(res["data"])
-    print(res["data"]["data"])
-    print(res["data"]["data"][0])
+    #print(res)
+    #print(res['error'])
+    #print(res["data"])
+    #print(res["data"]["data"])
+    print(res["data"]["data"][0]["jsondata"])
     if not res['error']:
-        BAY = res['data']['data'][0]['jsondata']['bay']
+        BAY = res["data"]["data"][0]["jsondata"]["bay"]
         LEDState('ready')
         Process(target=keyboard_listener(BAY)).start()
     else:
