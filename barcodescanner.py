@@ -130,7 +130,7 @@ def deviceIdentification():
     #print(res['error'])
     #print(res["data"])
     #print(res["data"]["data"])
-    print(res["data"]["data"][0]["jsondata"])
+    print(res["data"]["data"][0]["jsondata"]["bay"])
     if not res['error']:
         BAY = res["data"]["data"][0]["jsondata"]["bay"]
         LEDState('ready')
