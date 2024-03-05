@@ -121,20 +121,32 @@ async def processShipmentAsync(bcode, BAY):
 
 def processShipment(bcode, BAY):
     global sendBarcodeUrl
+    writeToFile(f"Sending Data to api: {bcode} and bay {BAY} url: {sendBarcodeUrl}")
 
-    # Data to be sent in the request body (as a dictionary)
+    # Prepare data for POST request
     data = {"barcode": bcode, "bay": BAY}
 
-    # Send the POST request and store the response object
-    response = requests.post(sendBarcodeUrl, data=data)
+    LEDState('processing')
 
-    # Check if the request was successful
-    if response.status_code == 200:
-        # Print the response content
-        print(response.text)
-    else:
-        # Print an error message
-        print(f"Error: {response.status_code}")
+    try:
+        # Send the POST request and store the response object
+        response = requests.post(sendBarcodeUrl, data=data)
+
+        # Check if the request was successful
+        if response.status_code == 200:
+            # Print the response content
+            writeToFile(f"Data sent successfully. Response: {res}")
+            if res['message'] == "success":
+                LEDState("barcode_ok")
+            else:
+                LEDState("barcode_error")
+        else:
+            # Print an error message
+            writeToFile(f"Error response code {response.status_code}")
+            LEDState("barcode_error")
+    except aiohttp.ClientError as e:
+            writeToFile(f"Error sending request {e}")
+            LEDState("barcode_error")
     
 def writeToFile(msg):
     with open("barcode.txt", "a") as file:
