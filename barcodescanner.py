@@ -135,7 +135,6 @@ def deviceIdentification():
         Process(target=keyboard_listener(BAY)).start()
     else:
         R_BLINK.value = True
-    
     print(f"B: {B_BLINK.value} G: {G_BLINK.value} R: {R_BLINK.value} BAY: {BAY}")
 
 def LEDState(state):
