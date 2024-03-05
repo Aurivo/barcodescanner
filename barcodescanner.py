@@ -24,9 +24,10 @@ R_BLINK = Value('b', True)
 G_BLINK = Value('b', True)
 
 # URLS
-#getInfoUrl = "http://api.cgold.local/api/adicomms/getstatus"
-getInfoUrl = "http://192.168.86.72:5000/processdata"
-sendBarcodeUrl = "http://192.168.86.72:5000/data"
+getInfoUrl = "http://api.cgold.local/api/adicomms/getstatus"
+sendBarcodeUrl = "/api/acfshipping/load_truck"
+#getInfoUrl = "http://192.168.86.72:5000/processdata"
+#sendBarcodeUrl = "http://192.168.86.72:5000/data"
 BAY = ""
 BARCODE = ""
 
