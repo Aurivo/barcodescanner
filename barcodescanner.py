@@ -67,7 +67,8 @@ def listen_for_key(event, BAY):
         key_name = evdev.ecodes.KEY[event.code]  # Access key names using KEY
         if event.code == 28:
             print("Enter Pressed")
-            asyncio.run(processShipment(BARCODE, BAY))
+            #asyncio.run(processShipment(BARCODE, BAY))
+            processShipment(BARCODE, BAY)
             BARCODE = ""
         else:
             BARCODE += key_name.replace("KEY_", "")
