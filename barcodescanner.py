@@ -106,6 +106,7 @@ async def processShipment(bcode, BAY):
                 print('Request successful. Status code:', response.status)
                 res = await response.json()  # Await JSON response
                 print('Response data:', res)
+                writeToFile(f"response {res}")
 
                 if response.status == 201:
                     writeToFile(f"Data sent successfully. Response: {res}")
