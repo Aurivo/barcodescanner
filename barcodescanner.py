@@ -120,7 +120,8 @@ async def processShipmentAsync(bcode, BAY):
             LEDState("barcode_error")
 
 def processShipment(bcode, BAY):
-    global sendBarcodeUrl
+    #global sendBarcodeUrl
+    sendBarcodeUrl = "http://192.168.111.60:5348/api/acfshipping/load_truck"
     writeToFile(f"Sending Data to api: {bcode} and bay {BAY} url: {sendBarcodeUrl}")
 
     # Prepare data for POST request
